@@ -13,7 +13,7 @@ def load_data():
         str: Base64-encoded serialized data (JSON-safe).
     """
     print("We are here")
-    df = pd.read_csv(os.path.join(os.path.dirname(__file__), "../data/file.csv"))
+    df = pd.read_csv(os.path.join(os.path.dirname(__file__), "../data/house_prices.csv"), na_values="?")  # OpenML marks missing values as "?"
     serialized_data = pickle.dumps(df)                    # bytes
     return base64.b64encode(serialized_data).decode("ascii")  # JSON-safe string
 
@@ -26,8 +26,8 @@ def data_preprocessing(data_b64: str):
     data_bytes = base64.b64decode(data_b64)
     df = pickle.loads(data_bytes)
 
-    df = df.dropna()
-    clustering_data = df[["BALANCE", "PURCHASES", "CREDIT_LIMIT"]]
+    # select columns before dropna: many house columns (PoolQC, Alley) are mostly empty
+    clustering_data = df[["GrLivArea", "OverallQual", "YearBuilt", "SalePrice"]].dropna()
 
     min_max_scaler = MinMaxScaler()
     clustering_data_minmax = min_max_scaler.fit_transform(clustering_data)
