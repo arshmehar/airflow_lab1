@@ -53,8 +53,6 @@ Started from the official Airflow 2.9.2 compose file, then:
 
 ## Run it
 
-Requires Docker Desktop with at least 4GB of memory.
-
 ```bash
 echo -e "AIRFLOW_UID=$(id -u)" > .env      # Windows: AIRFLOW_UID=50000
 mkdir -p logs plugins config
